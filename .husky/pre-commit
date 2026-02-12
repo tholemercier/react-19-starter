@@ -1,0 +1,5 @@
+echo "🧹 Linting entire codebase..."
+pnpm lint
+
+echo "🔎 Type-checking entire codebase..."
+pnpm typecheck

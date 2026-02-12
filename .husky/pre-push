@@ -1,0 +1,5 @@
+echo "Running full test suite..."
+pnpm test:coverage
+
+echo "Checking for outdated dependencies"
+pnpm deps:check

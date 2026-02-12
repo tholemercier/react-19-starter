@@ -1,0 +1,12 @@
+export { default as meanBy } from "lodash/meanBy";
+export { default as uniqBy } from "lodash/uniqBy";
+export { default as sortBy } from "lodash/sortBy";
+export { default as round } from "lodash/round";
+export { default as range } from "lodash/range";
+export { default as last } from "lodash/last";
+export { default as first } from "lodash/first";
+export { default as omit } from "lodash/omit";
+export { default as pick } from "lodash/pick";
+export { default as pickBy } from "lodash/pickBy";
+export { default as uniq } from "lodash/uniq";
+export { default as groupBy } from "lodash/groupBy";

@@ -1,0 +1,50 @@
+{
+  "compilerOptions": {
+    // Base directory for non-relative module imports (like `import x from "module"`)
+    "baseUrl": ".",
+    // Sets up a path alias: src/* maps to ./src/*, allowing cleaner and more maintainable imports.
+    "paths": {
+      "src/*": ["./src/*"]
+    },
+    // Prevent JS output from tsc (overridable for packages like `mylib` that need declarations)
+    "noEmit": true,
+    // Required when using tools like Vite/Babel to transpile each file individually
+    "isolatedModules": true,
+    // Target JavaScript version output (latest ECMAScript features)
+    "target": "ESNext",
+    // Module system to emit (ESNext for native ESM support)
+    "module": "ESNext",
+    // Allow importing JSON files as modules
+    "resolveJsonModule": true,
+    // Output directory for compiled JavaScript and declarations
+    "outDir": "dist",
+    // Module resolution strategy for finding modules
+    // (bundler-friendly resolution aligning with modern bundlers like Vite/Webpack/Rollup)
+    // If any bundling issues, switch to "Node"
+    "moduleResolution": "bundler",
+    // Enable all strict type-checking options (recommended for robust code)
+    "strict": true,
+    // Enable interoperability between CommonJS and ES Modules (adds __importDefault etc.)
+    "esModuleInterop": true,
+    // Skip type checking of all declaration files (*.d.ts) for faster compilation
+    "skipLibCheck": true,
+    // Specify global type declaration packages to include (Vitest globals for tests)
+    "types": ["vitest/globals"],
+    // JSX code generation mode for React 17+ (automatic import of JSX functions)
+    "jsx": "react-jsx",
+    // Include standard library declaration files (DOM and latest ECMAScript features)
+    "lib": ["DOM", "ESNext"],
+    // Enables faster subsequent TypeScript builds by reusing previous build information
+    "incremental": true
+  },
+  "include": [
+    "src",
+    "scripts",
+    "eslint.config.js",
+    "vite.config.ts",
+    "prettier.config.js",
+    "package.json",
+    "tsconfig.json"
+  ],
+  "exclude": ["node_modules", "dist", "build"]
+}
