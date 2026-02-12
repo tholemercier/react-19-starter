@@ -8,10 +8,16 @@ console.warn(`
 
 `);
 
+console.warn(`
+  
+WARNING: Do not update @types/node to @25.x.x unless you are running Node@25
+  
+`);
+
 // Run npm outdated
 spawnSync("npm outdated", {
   encoding: "utf8",
-  shell: true, // important for PATH resolution
+  shell: true, // important for PATH resolution (windows only??)
   stdio: "inherit",
 });
 
