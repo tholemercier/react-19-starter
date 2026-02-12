@@ -93,7 +93,7 @@ const chunkedEntriesBundleConfig = (config: ConfigEnv, bundleName = "index", out
         // Excludes main entry point from the coverage
         // Excludes vendors folder, usually used as re-export tree-shaking optimization
         // Excludes type.ts files such as product.type.ts only containing constants and types
-        exclude: [...configDefaults.exclude, "src/main.tsx", "src/vendors/**/*", "**/*.type.ts"],
+        exclude: [...configDefaults.exclude, "src/main.tsx", "src/vendors/**/*", "**/*.type.ts", "**/*.d.ts"],
         thresholds: {
           // Ensures the entire project meets coverage requirements
           global: {
