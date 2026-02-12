@@ -16,7 +16,7 @@ npm install -g pnpm
 
 To install all project dependencies (with a clean, locked state):
 ```
-pnpm install
+pnpm install --frozen-lockfile
 ```
 > This is the preferred method to ensure consistency across environments.
 
