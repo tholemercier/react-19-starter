@@ -13,6 +13,7 @@ dist-ssr
 *.local
 coverage
 .eslintcache
+.deps-check
 
 # Editor directories and files
 .vscode/*
