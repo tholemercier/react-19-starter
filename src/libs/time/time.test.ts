@@ -827,6 +827,60 @@ describe("Time Helpers Test Suite", () => {
       expect(hourFormatted).toBe(expectedHour);
     });
 
+    it("should create correct toFormat function with Intl.DateTimeFormatOptions", () => {
+      const { toFormat } = dateWithTimeZoneFactory("America/New_York");
+
+      const date = new Date(Date.UTC(2023, 6, 15, 12, 0, 0));
+
+      // test full options
+      const options: Intl.DateTimeFormatOptions = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+      const formatted = toFormat(date, options);
+
+      const expected = new Intl.DateTimeFormat(timeType.theGoodLocale, {
+        ...options,
+        timeZone: "America/New_York",
+      }).format(date);
+
+      expect(formatted).toBe(expected);
+    });
+
+    it("should return 'NaN-NaN-NaN' for invalid dates in toFormat", () => {
+      const { toFormat } = dateWithTimeZoneFactory("America/New_York");
+
+      const invalidDate = "not-a-date";
+      const formatted = toFormat(invalidDate, { year: "numeric" });
+
+      expect(formatted).toBe("NaN-NaN-NaN");
+    });
+
+    it("should correctly format using custom numeric options", () => {
+      const { toFormat } = dateWithTimeZoneFactory("UTC");
+
+      const date = new Date(Date.UTC(2023, 0, 5, 8, 9, 10));
+      const options: Intl.DateTimeFormatOptions = {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+      };
+      const formatted = toFormat(date, options);
+
+      const expected = new Intl.DateTimeFormat(timeType.theGoodLocale, {
+        ...options,
+        timeZone: "UTC",
+      }).format(date);
+
+      expect(formatted).toBe(expected);
+    });
+
     it("should handle the noMs option correctly in toDateAndTime", () => {
       const { toDateAndTime } = dateWithTimeZoneFactory("America/New_York");
 

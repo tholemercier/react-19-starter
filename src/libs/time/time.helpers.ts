@@ -303,6 +303,41 @@ export const toUtcDate = (date: Date | string): StrictDateString => {
 };
 
 /**
+ * Formats a date in UTC using `Intl.DateTimeFormat`.
+ *
+ * Accepts a `Date` instance or a date-compatible string and formats it
+ * using the provided `Intl.DateTimeFormatOptions`.
+ *
+ * If the input date is invalid, the function returns the string
+ * `"NaN-NaN-NaN"` instead of throwing.
+ *
+ * @param {Date | string} date
+ *   The date to format. Can be a `Date` object or any string accepted by `Date`.
+ *
+ * @param {Intl.DateTimeFormatOptions} options
+ *   Formatting options forwarded to `Intl.DateTimeFormat`.
+ *
+ * @returns {string}
+ *   The formatted date string in UTC, or `"NaN-NaN-NaN"` if the date is invalid.
+ *
+ * @example
+ * toUtcFormat("2026-02-18", { year: "numeric", month: "2-digit", day: "2-digit" });
+ * // "18/02/2026"
+ *
+ * @example
+ * toUtcFormat(new Date(), { weekday: "long", year: "numeric" });
+ * // "Wednesday 2026"
+ */
+export const toUtcFormat = (date: Date | string, options: Intl.DateTimeFormatOptions) => {
+  const d = new Date(date);
+  if (Number.isNaN(d.getTime())) {
+    return "NaN-NaN-NaN";
+  }
+
+  return new Intl.DateTimeFormat(theGoodLocale, { ...options }).format(d);
+};
+
+/**
  * Factory function that returns functions for converting a given date to a date or date and time format,
  * with optional handling for a specific time zone. It provides two methods:
  * - `toDate`: Converts the date to a `YYYY-MM-DD` format in the specified time zone.
@@ -312,6 +347,10 @@ export const toUtcDate = (date: Date | string): StrictDateString => {
  * @returns {{
  *   toDate: (date: Date | string) => StrictDateString,
  *   toDateAndTime: (date: Date | string, options?: { noMs?: boolean }) => [StrictDateString, string]
+ *   toFormat: (
+ *     date: Date | string,
+ *     options: Intl.DateTimeFormatOptions
+ *   ) => string
  * }} - An object containing:
  *   - `toDate`: A function that converts the date to `YYYY-MM-DD` in the specified time zone.
  *   - `toDateAndTime`: A function that converts the date to `[StrictDateString, string]` in the specified time zone, with optional exclusion of milliseconds.
@@ -326,27 +365,43 @@ export const toUtcDate = (date: Date | string): StrictDateString => {
  * // Returns: ["2024-03-30", "12:34:56"] (in New York time zone, no milliseconds)
  *
  * @example
+ * toFormat("2024-03-30T12:34:56.789Z", {
+ *   weekday: "long",
+ *   year: "numeric",
+ *   month: "long",
+ *   day: "numeric",
+ * });
+ * // "Saturday, March 30, 2024"
+ *
+ * @example
  * toDate("invalid-date");
  * // Returns: "NaN-NaN-NaN"
  *
  * @example
  * toDateAndTime("invalid-date");
  * // Returns: ["NaN-NaN-NaN", "NaN:NaN:NaN"]
+ *
+ * @example
+ * toFormat("invalid-date", { year: "numeric" });
+ * // "NaN-NaN-NaN"
  */
 export const dateWithTimeZoneFactory = (
   timeZone: string,
 ): {
   toDate: (date: Date | string) => StrictDateString;
   toDateAndTime: (date: Date | string, options?: { noMs?: boolean }) => [StrictDateString, string];
+  toFormat: (date: Date | string, options: Intl.DateTimeFormatOptions) => string;
 } => {
   if (!toLocaleStringWorks())
     return {
       toDate: toUtcDate,
       toDateAndTime: toUtcDateAndTime,
+      toFormat: toUtcFormat,
     };
 
   const toDate = (date: Date | string): StrictDateString => {
     const formattedDate = new Date(date).toLocaleDateString(theGoodLocale, { timeZone });
+
     if (isStrictDateString(formattedDate)) return formattedDate;
     return "NaN-NaN-NaN";
   };
@@ -365,7 +420,15 @@ export const dateWithTimeZoneFactory = (
     return [toDate(date), options?.noMs ? hourNoMs : hourWithMs];
   };
 
-  return { toDate, toDateAndTime };
+  const toFormat = (date: Date | string, options: Intl.DateTimeFormatOptions): string => {
+    const d = new Date(date);
+
+    if (Number.isNaN(d.getTime())) return "NaN-NaN-NaN";
+
+    return new Intl.DateTimeFormat(theGoodLocale, { ...options, timeZone }).format(d);
+  };
+
+  return { toDate, toDateAndTime, toFormat };
 };
 
 export const isWeekend = (date = new Date()) => [0, 6].includes(date.getUTCDay());
