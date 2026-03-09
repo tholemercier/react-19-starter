@@ -6,6 +6,7 @@ import clsx from "clsx";
 import { Tooltip } from "recharts";
 import type { TooltipContentProps } from "recharts";
 import type { NameType, ValueType } from "recharts/types/component/DefaultTooltipContent";
+import type { ContentType } from "recharts/types/component/Tooltip";
 
 type Payload<T> = readonly {
   color: string;
@@ -58,8 +59,6 @@ const createTooltipContent = <T,>(header: FC<TooltipTemplateType<T>>, body: FC<T
         </div>
       );
     }
-
-    return null;
   };
 };
 
@@ -70,5 +69,10 @@ export const ChartTooltipTemplate = <T,>({
   header: FC<TooltipTemplateType<T>>;
   body: FC<TooltipTemplateType<T>>;
 }) => {
-  return <Tooltip content={createTooltipContent(header, body)} wrapperStyle={{ pointerEvents: "auto" }} />;
+  return (
+    <Tooltip
+      content={createTooltipContent(header, body) as unknown as ContentType<ValueType, NameType>}
+      wrapperStyle={{ pointerEvents: "auto" }}
+    />
+  );
 };

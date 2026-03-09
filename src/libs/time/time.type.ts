@@ -45,19 +45,18 @@ export type DateLikeOrNull = DateLike | false | undefined | null | 0;
 
 export type Year = `${number}${number}${number}${number}`;
 
-// eslint-disable-next-line prettier/prettier
-const months = ["01" , "02" , "03" , "04" , "05" , "06" , "07" , "08" , "09" , "10" , "11" , "12"] as const
+const months = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"] as const;
 const isMonth = setTypeGuard(months);
 type Month = (typeof months)[number];
 
-/* eslint-disable prettier/prettier */
+// prettier-ignore
 const days = [
   "01", "02", "03", "04", "05", "06", "07", "08", "09", "10",
   "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
   "21", "22", "23", "24", "25", "26", "27", "28", "29", "30",
   "31"
 ] as const;
-/* eslint-enable prettier/prettier */
+
 const isDay = setTypeGuard(days);
 
 type Day = (typeof days)[number];
